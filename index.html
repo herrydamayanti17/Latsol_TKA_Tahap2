@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Interaktif TKA 2026 - PG & PGK 5 Opsi</title>
+    <!-- MathJax CDN untuk Render Formula Matematika -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --iss-green-dark: #0d3b1e;
+            --iss-green: #1b5e20;
+            --iss-gold: #d4af37;
+            --iss-gold-light: #fff8e1;
+            --iss-red: #c62828;
+            --iss-red-light: #ffebee;
+            --bg-color: #f4f7f5;
+            --text-color: #212529;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            border-top: 6px solid var(--iss-gold);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .iss-header {
+            background: linear-gradient(135deg, var(--iss-green-dark) 0%, var(--iss-green) 60%, #14471e 100%);
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid var(--iss-gold);
+        }
+
+        .iss-header h1 {
+            font-size: 1.5rem;
+            color: var(--iss-gold);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .iss-header p {
+            font-size: 0.88rem;
+            color: #e0e0e0;
+        }
+
+        .page-section {
+            display: none;
+            padding: 20px;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* FORM IDENTITAS */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--iss-green-dark);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            border-color: var(--iss-gold);
+            outline: none;
+        }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .btn-gold { background-color: var(--iss-gold); color: var(--iss-green-dark); }
+        .btn-gold:hover { background-color: #b89628; color: #fff; }
+        .btn-green { background-color: var(--iss-green); color: #ffffff; }
+        .btn-green:hover { background-color: var(--iss-green-dark); }
+        .btn-red { background-color: var(--iss-red); color: #ffffff; }
+        .btn-red:hover { background-color: #9a0007; }
+        .btn-block { width: 100%; }
+
+        /* QUIZ DISPLAY */
+        .quiz-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--iss-gold-light);
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .badge-container {
+            display: flex;
+            gap: 8px;
+        }
+
+        .badge-topic {
+            background-color: var(--iss-gold-light);
+            color: var(--iss-green-dark);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border: 1px solid var(--iss-gold);
+        }
+
+        .badge-type {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            background-color: #e3f2fd;
+            color: #0d47a1;
+            border: 1px solid #90caf9;
+        }
+
+        .badge-type.pgk {
+            background-color: #f3e5f5;
+            color: #4a148c;
+            border: 1px solid #ce93d8;
+        }
+
+        .progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--iss-green) 0%, var(--iss-gold) 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--iss-green-dark);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .options-list {
+            list-style: none;
+            margin-bottom: 15px;
+        }
+
+        .option-item {
+            margin-bottom: 10px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #fafafa;
+            user-select: none;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .option-label:hover {
+            border-color: var(--iss-gold);
+            background-color: var(--iss-gold-light);
+        }
+
+        .option-label.selected {
+            border-color: var(--iss-green);
+            background-color: #e8f5e9;
+            font-weight: 600;
+        }
+
+        .option-label input {
+            margin-right: 12px;
+            margin-top: 3px;
+            accent-color: var(--iss-green);
+            transform: scale(1.2);
+        }
+
+        .option-key-prefix {
+            font-weight: bold;
+            margin-right: 8px;
+            color: var(--iss-green-dark);
+        }
+
+        /* FEEDBACK BOX */
+        .feedback-box {
+            display: none;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .fb-correct {
+            background-color: #e8f5e9;
+            border: 2px solid var(--iss-green);
+            color: var(--iss-green-dark);
+        }
+
+        .fb-incorrect {
+            background-color: var(--iss-red-light);
+            border: 2px solid var(--iss-red);
+            color: #b71c1c;
+        }
+
+        .fb-title {
+            font-weight: bold;
+            font-size: 1.05rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fb-content {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #212529;
+            background-color: #ffffff;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(0,0,0,0.08);
+            margin-top: 6px;
+        }
+
+        .palette-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(38px, 1fr));
+            gap: 6px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px dashed #ccc;
+        }
+
+        .palette-btn {
+            padding: 8px 0;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .palette-btn.active {
+            border: 2px solid var(--iss-gold);
+            background-color: var(--iss-gold);
+            color: var(--iss-green-dark);
+        }
+
+        .palette-btn.answered {
+            background-color: var(--iss-green);
+            color: #fff;
+            border-color: var(--iss-green-dark);
+        }
+
+        /* ANALISIS & RESULT */
+        .score-card {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--iss-green-dark), var(--iss-green));
+            color: #fff;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px solid var(--iss-gold);
+        }
+
+        .score-big {
+            font-size: 3.2rem;
+            font-weight: 800;
+            color: var(--iss-gold);
+            margin: 5px 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .stat-box.green { background-color: #e8f5e9; color: var(--iss-green-dark); border: 1px solid var(--iss-green); }
+        .stat-box.red { background-color: var(--iss-red-light); color: var(--iss-red); border: 1px solid var(--iss-red); }
+        .stat-box.gold { background-color: var(--iss-gold-light); color: #8f6b00; border: 1px solid var(--iss-gold); }
+
+        .analysis-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #fff;
+        }
+
+        .analysis-card.correct { border-left: 6px solid var(--iss-green); }
+        .analysis-card.incorrect { border-left: 6px solid var(--iss-red); }
+
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border-radius: 4px;
+            color: #fff;
+        }
+
+        .status-badge.correct { background-color: var(--iss-green); }
+        .status-badge.incorrect { background-color: var(--iss-red); }
+
+        .explanation-box {
+            background-color: #f8f9fa;
+            border-top: 1px solid #eee;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="iss-header">
+        <h1>Tes Kemampuan Akademik (TKA) 2026</h1>
+        <p>Aplikasi Kuis Interaktif - Pilihan Ganda & Pilihan Ganda Kompleks</p>
+    </div>
+
+    <!-- HALAMAN DEPAN: IDENTITAS PESERTA -->
+    <div id="page-cover" class="page-section active">
+        <h2 style="color: var(--iss-green-dark); margin-bottom: 15px; border-bottom: 2px solid var(--iss-gold); padding-bottom: 5px;">Identitas Peserta Ujian</h2>
+        <form id="identity-form" onsubmit="event.preventDefault(); startQuiz();">
+            <div class="form-group">
+                <label for="student-name">Nama Lengkap Peserta *</label>
+                <input type="text" id="student-name" required placeholder="Masukkan nama lengkap Anda">
+            </div>
+            <div class="form-group">
+                <label for="student-class">Kelas / No. Ujian *</label>
+                <input type="text" id="student-class" required placeholder="Contoh: XII MIPA 1 / 2026-001">
+            </div>
+            <div class="form-group">
+                <label for="test-date">Tanggal Pelaksanaan</label>
+                <input type="text" id="test-date" readonly>
+            </div>
+            <button type="submit" class="btn btn-gold btn-block" style="font-size: 1.1rem; padding: 14px;">Mulai Pengerjaan Kuis ►</button>
+        </form>
+    </div>
+
+    <!-- HALAMAN SOAL (MODE 1 SOAL 1 HALAMAN) -->
+    <div id="page-quiz" class="page-section">
+        <div class="quiz-topbar">
+            <span id="question-number-display" style="font-weight: bold; color: var(--iss-green-dark);">Soal 1 dari 25</span>
+            <div class="badge-container">
+                <span id="type-badge" class="badge-type">Pilihan Ganda</span>
+                <span id="topic-badge" class="badge-topic">TOPIC</span>
+            </div>
+        </div>
+
+        <div class="progress-container">
+            <div id="quiz-progress" class="progress-bar"></div>
+        </div>
+
+        <div id="question-container">
+            <div id="question-text" class="question-title"></div>
+            <ul id="options-container" class="options-list"></ul>
+            
+            <!-- KOTAK TANGGAPAN & PEMBAHASAN LANGSUNG -->
+            <div id="feedback-box" class="feedback-box"></div>
+        </div>
+
+        <div class="nav-buttons">
+            <button id="btn-prev" class="btn btn-gold" onclick="prevQuestion()" disabled>◄ Sebelumnya</button>
+            <button id="btn-next" class="btn btn-green" onclick="nextQuestion()">Selanjutnya ►</button>
+            <button id="btn-submit" class="btn btn-red" onclick="confirmSubmit()" style="display: none;">Selesai & Kumpulkan</button>
+        </div>
+
+        <div style="margin-top:20px; font-weight:bold; font-size:0.85rem; color:var(--iss-green-dark);">Navigasi Lembar Jawab:</div>
+        <div id="palette-container" class="palette-container"></div>
+    </div>
+
+    <!-- HALAMAN BELAKANG: ANALISIS & PEMBAHASAN TOTAL -->
+    <div id="page-result" class="page-section">
+        <div class="score-card">
+            <h2 id="result-student-name">Nama Peserta</h2>
+            <p id="result-student-class" style="color: var(--iss-gold-light);">Kelas / No. Ujian</p>
+            <div id="final-score" class="score-big">0</div>
+            <p>SKOR AKHIR TKA MATEMATIKA</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-box green">
+                <div style="font-size: 1.4rem;" id="stat-correct">0</div>
+                <div>Benar</div>
+            </div>
+            <div class="stat-box red">
+                <div style="font-size: 1.4rem;" id="stat-incorrect">0</div>
+                <div>Salah</div>
+            </div>
+            <div class="stat-box gold">
+                <div style="font-size: 1.4rem;" id="stat-accuracy">0%</div>
+                <div>Akurasi</div>
+            </div>
+        </div>
+
+        <h3 style="color: var(--iss-green-dark); margin-bottom: 15px; border-bottom: 2px solid var(--iss-gold); padding-bottom: 5px;">Analisis & Pembahasan Lintas Indikator</h3>
+        <div id="analysis-list"></div>
+
+        <button class="btn btn-green btn-block" onclick="location.reload();" style="margin-top: 20px;">Ulangi Kuis</button>
+    </div>
+</div>
+
+<script>
+    // Tanggal Otomatis
+    const today = new Date();
+    document.getElementById('test-date').value = today.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+    const OPTION_KEYS = ['A', 'B', 'C', 'D', 'E'];
+
+    // DATABASE 25 SOAL (PG 5 OPTION & PGK MINIMAL 2 JAWABAN BENAR)
+    const quizData = [
+        {
+            id: 1, type: "single", topic: "MATRIKS", indicator: "Menentukan invers matriks berordo 2x2",
+            q: "1. Diketahui matriks $A = \\begin{pmatrix} 5 & 2 \\\\ 7 & 3 \\end{pmatrix}$. Tentukan invers dari matriks $A$!",
+            options: [
+                "$\\begin{pmatrix} 3 & -2 \\\\ -7 & 5 \\end{pmatrix}$",
+                "$\\begin{pmatrix} 3 & 2 \\\\ 7 & 5 \\end{pmatrix}$",
+                "$\\begin{pmatrix} -3 & 2 \\\\ 7 & -5 \\end{pmatrix}$",
+                "$\\begin{pmatrix} 5 & -2 \\\\ -7 & 3 \\end{pmatrix}$",
+                "$\\begin{pmatrix} -5 & 2 \\\\ 7 & -3 \\end{pmatrix}$"
+            ], ans: [0],
+            exp: "<b>Solusi:</b><br>$A^{-1} = \\frac{1}{\\det(A)}\\begin{pmatrix} d & -b \\\\ -c & a \\end{pmatrix}$.<br>$\\det(A) = (5)(3) - (2)(7) = 15 - 14 = 1$.<br>Maka $A^{-1} = \\begin{pmatrix} 3 & -2 \\\\ -7 & 5 \\end{pmatrix}$ (Opsi A)."
+        },
+        {
+            id: 2, type: "multiple", topic: "MATRIKS", indicator: "Menganalisis sifat dan operasi matriks 2x2",
+            q: "2. Diketahui matriks $B = \\begin{pmatrix} 2 & 1 \\\\ 4 & 3 \\end{pmatrix}$. Manakah dari pernyataan berikut yang <b>BENAR</b>? (Pilih minimal 2 jawaban)",
+            options: [
+                "Determinan dari matriks $B$ adalah 2.",
+                "Trace (jumlah elemen diagonal utama) dari matriks $B$ adalah 5.",
+                "Matriks $B$ tidak memiliki invers (singular).",
+                "Transpose matriks $B$ adalah $B^T = \\begin{pmatrix} 2 & 4 \\\\ 1 & 3 \\end{pmatrix}$.",
+                "Matriks $B$ merupakan matriks identitas."
+            ], ans: [0, 1, 3],
+            exp: "<b>Pembahasan Opsi:</b><br>• <b>A (Benar):</b> $\\det(B) = (2)(3) - (1)(4) = 6 - 4 = 2$.<br>• <b>B (Benar):</b> $\\text{Trace}(B) = 2 + 3 = 5$.<br>• <b>C (Salah):</b> Karena $\\det(B) \\neq 0$, matriks $B$ memiliki invers.<br>• <b>D (Benar):</b> $B^T$ mengubah baris menjadi kolom $\\implies \\begin{pmatrix} 2 & 4 \\\\ 1 & 3 \\end{pmatrix}$.<br>• <b>E (Salah):</b> Matriks identitas berordo 2x2 adalah $\\begin{pmatrix} 1 & 0 \\\\ 0 & 1 \\end{pmatrix}$."
+        },
+        {
+            id: 3, type: "single", topic: "MATRIKS", indicator: "SPLDV menggunakan konsep invers matriks",
+            q: "3. Harga 3 buku dan 2 pensil adalah Rp15.000, sedangkan harga 2 buku dan 3 pensil adalah Rp12.500. Menggunakan invers matriks, berapa harga 1 buku dan 1 pensil?",
+            options: [
+                "Rp3.000 dan Rp2.000",
+                "Rp4.000 dan Rp1.500",
+                "Rp3.500 dan Rp2.000",
+                "Rp4.500 dan Rp1.000",
+                "Rp2.500 dan Rp3.000"
+            ], ans: [1],
+            exp: "<b>Solusi:</b><br>$\\begin{pmatrix} 3 & 2 \\\\ 2 & 3 \\end{pmatrix}\\begin{pmatrix} x \\\\ y \\end{pmatrix} = \\begin{pmatrix} 15000 \\\\ 12500 \\end{pmatrix}$.<br>$\\det = 9 - 4 = 5$.<br>$\\begin{pmatrix} x \\\\ y \\end{pmatrix} = \\frac{1}{5}\\begin{pmatrix} 3 & -2 \\\\ -2 & 3 \\end{pmatrix}\\begin{pmatrix} 15000 \\\\ 12500 \\end{pmatrix} = \\begin{pmatrix} 4000 \\\\ 1500 \\end{pmatrix}$.<br>Jadi harga 1 buku = Rp4.000 dan 1 pensil = Rp1.500 (Opsi B)."
+        },
+        {
+            id: 4, type: "multiple", topic: "POLINOMIAL", indicator: "Pembuat nol dan faktor fungsi polinomial",
+            q: "4. Diketahui fungsi polinomial $f(x) = x^3 - 6x^2 + 11x - 6$. Pernyataan berikut yang <b>BENAR</b> adalah... (Pilih semua yang sesuai)",
+            options: [
+                "Pembuat nol dari fungsi $f(x)$ adalah $x = 1, x = 2,$ dan $x = 3$.",
+                "Sisa pembagian $f(x)$ oleh $(x - 1)$ adalah 0.",
+                "Nilai $f(0) = 6$.",
+                "Jumlah dari ketiga pembuat nol fungsi tersebut adalah 6.",
+                "Fungsi $f(x)$ tidak memiliki faktor linear."
+            ], ans: [0, 1, 3],
+            exp: "<b>Pembahasan Opsi:</b><br>• Faktorisasi: $f(x) = (x-1)(x-2)(x-3)$.<br>• <b>A (Benar):</b> Akar-akarnya adalah $x = 1, 2, 3$.<br>• <b>B (Benar):</b> Karena $(x-1)$ faktor, sisa pembagian $f(1) = 0$.<br>• <b>C (Salah):</b> $f(0) = -6$.<br>• <b>D (Benar):</b> $1 + 2 + 3 = 6$.<br>• <b>E (Salah):</b> $f(x)$ memiliki 3 faktor linear."
+        },
+        {
+            id: 5, type: "single", topic: "POLINOMIAL", indicator: "Operasi aljabar parameter dengan suku sisa",
+            q: "5. Polinomial $P(x) = x^4 + ax^3 + bx^2 - 14x + 15$ dibagi $(x-1)$ bersisa 0 dan dibagi $(x-2)$ bersisa -21. Tentukan nilai $a \\times b$!",
+            options: ["-10", "-8", "6", "12", "-6"], ans: [1],
+            exp: "<b>Solusi:</b><br>$P(1) = 0 \\implies 1 + a + b - 14 + 15 = 0 \\implies a + b = -2$.<br>$P(2) = -21 \\implies 16 + 8a + 4b - 28 + 15 = -21 \\implies 8a + 4b = -24 \\implies 2a + b = -6$.<br>Subtraksi: $a = -4$, maka $b = 2$. Hasil $a \\times b = (-4) \\times 2 = -8$ (Opsi B)."
+        },
+        {
+            id: 6, type: "multiple", topic: "POLINOMIAL", indicator: "Analisis dimensi bangun ruang dari volume polinomial",
+            q: "6. Volume balok dinyatakan oleh $V(x) = x^3 + 5x^2 + 2x - 8$. Jika panjang balok $(x+4)$ dan tinggi $(x-1)$, manakah pernyataan yang <b>BENAR</b>? (Pilih minimal 2 jawaban)",
+            options: [
+                "Lebar balok dinyatakan oleh polinomial $(x + 2)$.",
+                "Luas alas balok (panjang $\\times$ lebar) adalah $x^2 + 6x + 8$.",
+                "Untuk $x = 3$, tinggi balok adalah 2 unit.",
+                "Sisa pembagian $V(x)$ oleh $(x+4)$ adalah 0.",
+                "Faktor dari $V(x)$ adalah $(x-1), (x+2),$ dan $(x+5)$."
+            ], ans: [0, 1, 2, 3],
+            exp: "<b>Pembahasan Opsi:</b><br>• Pembagian $V(x) \\div [(x+4)(x-1)] = (x^3+5x^2+2x-8) \\div (x^2+3x-4) = (x+2)$.<br>• <b>A (Benar):</b> Lebar $= (x+2)$.<br>• <b>B (Benar):</b> Luas alas $= (x+4)(x+2) = x^2+6x+8$.<br>• <b>C (Benar):</b> Tinggi $= 3 - 1 = 2$.<br>• <b>D (Benar):</b> Karena $(x+4)$ faktor, maka sisa $= 0$.<br>• <b>E (Salah):</b> Faktor ketiga adalah $(x+2)$, bukan $(x+5)$."
+        },
+        {
+            id: 7, type: "single", topic: "FUNGSI", indicator: "Model pertumbuhan eksponensial",
+            q: "7. Pertumbuhan populasi dimodelkan $P(t) = 50.000(2)^{t/10}$ ($t$ dalam tahun). Berapa lama waktu yang dibutuhkan agar populasi menjadi 400.000 jiwa?",
+            options: ["20 tahun", "30 tahun", "40 tahun", "50 tahun", "10 tahun"], ans: [1],
+            exp: "<b>Solusi:</b><br>$400.000 = 50.000(2)^{t/10} \\implies 8 = 2^{t/10} \\implies 2^3 = 2^{t/10}$.<br>$\\frac{t}{10} = 3 \\implies t = 30$ tahun (Opsi B)."
+        },
+        {
+            id: 8, type: "multiple", topic: "FUNGSI", indicator: "Peluruhan eksponensial pada dosis obat",
+            q: "8. Dosis sisa obat dalam tubuh dimodelkan $D(t) = 100(0,5)^{t/4}$ mg ($t$ dalam jam). Manakah pernyataan yang <b>BENAR</b>?",
+            options: [
+                "Dosis awal obat yang dimasukkan ke tubuh ($t=0$) adalah 100 mg.",
+                "Setelah 4 jam, dosis obat yang tersisa dalam tubuh adalah 50 mg.",
+                "Dosis tersisa tepat 12,5 mg pada jam ke-12.",
+                "Obat akan tersisa 0 mg tepat pada jam ke-16.",
+                "Waktu paruh peluruhan dosis obat tersebut adalah 4 jam."
+            ], ans: [0, 1, 2, 4],
+            exp: "<b>Pembahasan Opsi:</b><br>• <b>A (Benar):</b> $D(0) = 100(1) = 100$ mg.<br>• <b>B (Benar):</b> $D(4) = 100(0,5)^1 = 50$ mg.<br>• <b>C (Benar):</b> $D(12) = 100(0,5)^3 = 12,5$ mg.<br>• <b>D (Salah):</b> Fungsi eksponensial secara teoritis mendekati 0 tapi tidak tepat 0 pada $t=16$.<br>• <b>E (Benar):</b> Dosis berkurang menjadi separuhnya setiap 4 jam."
+        },
+        {
+            id: 9, type: "single", topic: "FUNGSI", indicator: "Model fungsi trigonometri kontekstual",
+            q: "9. Pasang surut air laut dimodelkan $h(t) = 10 + 3 \\cos\\left(\\frac{\\pi}{6}t\\right)$ meter. Kedalaman maksimum dan kedalaman minimum air laut berturut-turut adalah...",
+            options: [
+                "13 m dan 7 m",
+                "10 m dan 3 m",
+                "13 m dan 10 m",
+                "16 m dan 4 m",
+                "12 m dan 8 m"
+            ], ans: [0],
+            exp: "<b>Solusi:</b><br>Nilai maksimum $\\cos = 1 \\implies h_{\\text{maks}} = 10 + 3(1) = 13$ m.<br>Nilai minimum $\\cos = -1 \\implies h_{\\text{min}} = 10 + 3(-1) = 7$ m (Opsi A)."
+        },
+        {
+            id: 10, type: "multiple", topic: "VEKTOR", indicator: "Vektor posisi dan panjang vektor diagonal ruang",
+            q: "10. Diketahui titik $A(0,0,0)$ dan $G(4,3,5)$ pada balok $ABCD.EFGH$. Pernyataan berikut yang <b>BENAR</b> adalah...",
+            options: [
+                "Vektor posisi $\\vec{AG}$ adalah $(4, 3, 5)$.",
+                "Panjang diagonal ruang $AG$ adalah $5\\sqrt{2}$ unit.",
+                "Panjang vektor $\\vec{AG}$ bernilai 12 unit.",
+                "Vektor satuan dari $\\vec{AG}$ adalah $\\frac{1}{5\\sqrt{2}}(4\\mathbf{i} + 3\\mathbf{j} + 5\\mathbf{k})$.",
+                "Titik $G$ berada pada bidang $XY$."
+            ], ans: [0, 1, 3],
+            exp: "<b>Pembahasan Opsi:</b><br>• <b>A (Benar):</b> $\\vec{AG} = G - A = (4,3,5)$.<br>• <b>B (Benar):</b> $|\\vec{AG}| = \\sqrt{4^2 + 3^2 + 5^2} = \\sqrt{16+9+25} = \\sqrt{50} = 5\\sqrt{2}$.<br>• <b>C (Salah):</b> Panjangnya $5\\sqrt{2} \\approx 7,07$, bukan 12.<br>• <b>D (Benar):</b> Vektor satuan = $\\frac{\\vec{AG}}{|\\vec{AG}|} = \\frac{1}{5\\sqrt{2}}(4\\mathbf{i} + 3\\mathbf{j} + 5\\mathbf{k})$.<br>• <b>E (Salah):</b> Karena $z=5 \\neq 0$, titik $G$ berada di ruang 3D."
+        },
+        {
+            id: 11, type: "single", topic: "VEKTOR", indicator: "Operasi parameter vektor jajargenjang",
+            q: "11. Pada jajargenjang $PQRS$, $\\vec{PQ}=\\vec{u}$ dan $\\vec{PS}=\\vec{v}$. Jika $T$ adalah titik potong kedua diagonal, maka vektor $\\vec{QT}$ sama dengan...",
+            options: [
+                "$\\frac{1}{2}(\\vec{v} - \\vec{u})$",
+                "$\\frac{1}{2}(\\vec{u} + \\vec{v})$",
+                "$\\vec{u} + \\vec{v}$",
+                "$\\vec{v} - \\vec{u}$",
+                "$\\frac{1}{2}(\\vec{u} - \\vec{v})$"
+            ], ans: [0],
+            exp: "<b>Solusi:</b><br>$\\vec{PR} = \\vec{u} + \\vec{v} \\implies \\vec{PT} = \\frac{1}{2}(\\vec{u} + \\vec{v})$.<br>$\\vec{QT} = \\vec{PT} - \\vec{PQ} = \\frac{1}{2}(\\vec{u} + \\vec{v}) - \\vec{u} = \\frac{1}{2}(\\vec{v} - \\vec{u})$ (Opsi A)."
+        },
+        {
+            id: 12, type: "multiple", topic: "VEKTOR", indicator: "Perbandingan ruas garis vektor",
+            q: "12. Diketahui titik $B(1,2)$ dan $C(7,5)$. Titik $P$ membagi segmen garis $BC$ di dalam dengan perbandingan $BP : PC = 2 : 1$. Pernyataan yang <b>BENAR</b> adalah...",
+            options: [
+                "Koordinat titik $P$ adalah $(5, 4)$.",
+                "Panjang segmen garis $BC$ adalah $3\\sqrt{5}$ unit.",
+                "Jika $A(1,1)$, maka panjang vektor $\\vec{AP}$ adalah 5 unit.",
+                "Koordinat titik $P$ adalah $(3, 3)$.",
+                "Panjang segmen $BP$ adalah $2\\sqrt{5}$ unit."
+            ], ans: [0, 1, 2, 4],
+            exp: "<b>Pembahasan Opsi:</b><br>• <b>A (Benar):</b> $P = \\frac{1(1,2) + 2(7,5)}{3} = \\frac{(15, 12)}{3} = (5,4)$.<br>• <b>B (Benar):</b> $|BC| = \\sqrt{(7-1)^2 + (5-2)^2} = \\sqrt{36+9} = \\sqrt{45} = 3\\sqrt{5}$.<br>• <b>C (Benar):</b> $\\vec{AP} = P - A = (4,3) \\implies |\\vec{AP}| = \\sqrt{4^2+3^2} = 5$.<br>• <b>D (Salah):</b> P yang benar adalah $(5,4)$.<br>• <b>E (Benar):</b> $|BP| = \\frac{2}{3} |BC| = \\frac{2}{3}(3\\sqrt{5}) = 2\\sqrt{5}$."
+        },
+        {
+            id: 13, type: "single", topic: "LINGKARAN", indicator: "Persamaan lingkaran sepusat",
+            q: "13. Persamaan lingkaran yang sepusat dengan $x^2 + y^2 - 4x + 6y - 12 = 0$ tetapi memiliki jari-jari 2 kali lebih besar adalah...",
+            options: [
+                "$x^2 + y^2 - 4x + 6y - 87 = 0$",
+                "$x^2 + y^2 - 4x + 6y - 24 = 0$",
+                "$x^2 + y^2 - 8x + 12y - 12 = 0$",
+                "$x^2 + y^2 - 4x + 6y - 48 = 0$",
+                "$x^2 + y^2 - 4x + 6y + 12 = 0$"
+            ], ans: [0],
+            exp: "<b>Solusi:</b><br>Pusat $(2, -3)$, $r_1 = \\sqrt{2^2 + (-3)^2 - (-12)} = \\sqrt{4+9+12} = 5$.<br>Jari-jari baru $r_2 = 2 \\times 5 = 10$.<br>Persamaan: $(x-2)^2 + (y+3)^2 = 100 \\implies x^2 + y^2 - 4x + 6y - 87 = 0$ (Opsi A)."
+        },
+        {
+            id: 14, type: "multiple", topic: "LINGKARAN", indicator: "Garis singgung lingkaran dan gradien",
+            q: "14. Diketahui lingkaran $L: x^2 + y^2 = 25$ dan garis $g: 3x - 4y + 8 = 0$. Pernyataan berikut yang <b>BENAR</b> adalah...",
+            options: [
+                "Gradien garis $g$ adalah $\\frac{3}{4}$.",
+                "Gradien garis yang tegak lurus dengan $g$ adalah $-\\frac{4}{3}$.",
+                "Salah satu persamaan garis singgung lingkaran $L$ yang tegak lurus garis $g$ adalah $4x + 3y = 25$.",
+                "Titik $(4, 3)$ terletak tepat pada lingkaran $L$.",
+                "Jari-jari lingkaran $L$ bernilai 25 unit."
+            ], ans: [0, 1, 2, 3],
+            exp: "<b>Pembahasan Opsi:</b><br>• <b>A (Benar):</b> $m_1 = -\\frac{a}{b} = -\\frac{3}{-4} = \\frac{3}{4}$.<br>• <b>B (Benar):</b> $m_2 = -\\frac{1}{m_1} = -\\frac{4}{3}$.<br>• <b>C (Benar):</b> PGSL: $y = -\\frac{4}{3}x \\pm 5\\sqrt{1 + 16/9} \\implies 4x + 3y = \\pm 25$.<br>• <b>D (Benar):</b> $4^2 + 3^2 = 16 + 9 = 25$.<br>• <b>E (Salah):</b> Jari-jari $r = \\sqrt{25} = 5$."
+        },
+        {
+            id: 15, type: "single", topic: "LINGKARAN", indicator: "Luas daerah gabungan bangun datar & lingkaran",
+            q: "15. Taman berbentuk persegi berukuran $14\\text{ m} \\times 14\\text{ m}$. Di keempat sudutnya terdapat seperempat lingkaran bunga ber-jari-jari 7 m. Luas area taman yang TIDAK tertutup bunga adalah...",
+            options: ["42 m²", "84 m²", "21 m²", "154 m²", "56 m²"], ans: [0],
+            exp: "<b>Solusi:</b><br>Luas persegi $= 14 \\times 14 = 196\\text{ m}^2$.<br>4 seperempat lingkaran $= 1$ lingkaran penuh $= \\frac{22}{7} \\times 7^2 = 154\\text{ m}^2$.<br>Sisa $= 196 - 154 = 42\\text{ m}^2$ (Opsi A)."
+        },
+        {
+            id: 16, type: "multiple", topic: "LINGKARAN", indicator: "Model matematika bianglala berbentuk lingkaran",
+            q: "16. Sebuah bianglala memiliki diameter 50 meter dan titik porosnya berada 28 meter di atas tanah. Manakah pernyataan yang <b>BENAR</b>?",
+            options: [
+                "Jari-jari bianglala adalah 25 meter.",
+                "Titik tertinggi bianglala dari tanah adalah 53 meter.",
+                "Titik terendah bianglala dari tanah adalah 3 meter.",
+                "Persamaan lingkaran bianglala (poros di sumbu-y) adalah $x^2 + (y-28)^2 = 625$.",
+                "Persamaan lingkaran bianglala adalah $x^2 + y^2 = 2500$."
+            ], ans: [0, 1, 2, 3],
+            exp: "<b>Pembahasan Opsi:</b><br>• <b>A (Benar):</b> $r = 50 / 2 = 25$ m.<br>• <b>B (Benar):</b> $h_{\\text{maks}} = 28 + 25 = 53$ m.<br>• <b>C (Benar):</b> $h_{\\text{min}} = 28 - 25 = 3$ m.<br>• <b>D (Benar):</b> Pusat $(0, 28)$ dan $r=25 \\implies x^2 + (y-28)^2 = 625$.<br>• <b>E (Salah):</b> Jari-jari kuadrat adalah $25^2 = 625$, bukan 2500."
+        },
+        {
+            id: 17, type: "single", topic: "TRANSFORMASI", indicator: "Komposisi translasi dan refleksi garis",
+            q: "17. Garis $ax + by - 6 = 0$ ditranslasi $T(2,-1)$ lalu dicerminkan Sumbu-Y menjadi $2x - 3y - 5 = 0$. Nilai $a + b$ adalah...",
+            options: ["-5", "-1", "1", "5", "-6"], ans: [0],
+            exp: "<b>Solusi:</b><br>1) Translasi $T(2,-1) \\implies a(x-2) + b(y+1) - 6 = 0 \\implies ax + by - 2a + b - 6 = 0$.<br>2) Refleksi Sumbu-Y ($x \\to -x$) $\\implies -ax + by - 2a + b - 6 = 0$.<br>Samakan dengan $2x - 3y - 5 = 0$:<br>$-a = 2 \\implies a = -2$. $b = -3$.<br>Cek konstanta: $-2(-2) + (-3) - 6 = 4 - 3 - 6 = -5$ (Sesuai).<br>Nilai $a + b = -2 + (-3) = -5$ (Opsi A)."
+        },
+        {
+            id: 18, type: "multiple", topic: "TRANSFORMASI", indicator: "Transformasi lingkaran (translasi & dilatasi)",
+            q: "18. Lingkaran $L_1: x^2 + y^2 = 9$ bertransformasi menjadi $L_2: (x-3)^2 + (y+2)^2 = 36$. Manakah pernyataan yang <b>BENAR</b>?",
+            options: [
+                "Pusat lingkaran $L_1$ berpindah ke $(3, -2)$ akibat translasi $T(3, -2)$.",
+                "Lingkaran $L_1$ mengalami dilatasi dengan faktor skala $k = 2$.",
+                "Luas daerah lingkaran $L_2$ adalah 4 kali luas lingkaran $L_1$.",
+                "Jari-jari lingkaran $L_2$ bernilai 6 unit.",
+                "Pusat lingkaran $L_2$ berada pada koordinat $(-3, 2)$."
+            ], ans: [0, 1, 2, 3],
+            exp: "<b>Pembahasan Opsi:</b><br>• <b>A (Benar):</b> Pusat berubah dari $(0,0)$ ke $(3,-2) \\implies T(3,-2)$.<br>• <b>B (Benar):</b> $r_1 = 3, r_2 = 6 \\implies k = 6/3 = 2$.<br>• <b>C (Benar):</b> Luas bertambah faktor $k^2 = 2^2 = 4$ kali.<br>• <b>D (Benar):</b> $r_2 = \\sqrt{36} = 6$.<br>• <b>E (Salah):</b> Pusat $L_2$ adalah $(3, -2)$."
+        },
+        {
+            id: 19, type: "single", topic: "TRANSFORMASI", indicator: "Rotasi garis lurus",
+            q: "19. Garis $g$ dirotasi 90° searah jarum jam dengan pusat $O(0,0)$ menghasilkan bayangan $y = 2x + 4$. Persamaan awal garis $g$ adalah...",
+            options: [
+                "$y = -2x - 4$",
+                "$y = -\\frac{1}{2}x - 2$",
+                "$y = \\frac{1}{2}x - 2$",
+                "$y = 2x - 4$",
+                "$y = -\\frac{1}{2}x + 2$"
+            ], ans: [1],
+            exp: "<b>Solusi:</b><br>Rotasi -90°: $x' = y, y' = -x$.<br>Substitusi ke bayangan: $-x = 2y + 4 \\implies 2y = -x - 4 \\implies y = -\\frac{1}{2}x - 2$ (Opsi B)."
+        },
+        {
+            id: 20, type: "multiple", topic: "LIMIT", indicator: "Faktorisasi dan nilai limit aljabar",
+            q: "20. Diketahui limit fungsi $\\lim_{x \\to 3} \\frac{x^3 - 27}{x^2 - 9}$. Manakah dari pernyataan berikut yang <b>BENAR</b>?",
+            options: [
+                "Bentuk $x^3 - 27$ dapat difaktorkan menjadi $(x-3)(x^2 + 3x + 9)$.",
+                "Hasil dari nilai limit tersebut adalah $\\frac{9}{2}$ atau $4,5$.",
+                "Substitusi langsung $x=3$ menghasilkan bentuk tak tentu $\\frac{0}{0}$.",
+                "Nilai limit tersebut bernilai 3.",
+                "Fungsi terdefinisi pada $x = 3$."
+            ], ans: [0, 1, 2],
+            exp: "<b>Pembahasan Opsi:</b><br>• <b>A (Benar):</b> Rumus selisih kubik $a^3 - b^3 = (a-b)(a^2+ab+b^2)$.<br>• <b>B (Benar):</b> $\\lim_{x \\to 3} \\frac{(x-3)(x^2+3x+9)}{(x-3)(x+3)} = \\frac{9+9+9}{6} = \\frac{27}{6} = \\frac{9}{2}$.<br>• <b>C (Benar):</b> $\\frac{3^3-27}{3^2-9} = \\frac{0}{0}$.<br>• <b>D (Salah):</b> Nilainya $4,5$.<br>• <b>E (Salah):</b> Tidak terdefinisi di $x=3$ karena penyebut nol."
+        },
+        {
+            id: 21, type: "single", topic: "LIMIT", indicator: "Limit aljabar bentuk akar",
+            q: "21. Nilai dari $\\lim_{x \\to 3} \\frac{x^2 - 9}{\\sqrt{x+1} - 2}$ adalah...",
+            options: ["24", "12", "6", "18", "36"], ans: [0],
+            exp: "<b>Solusi:</b><br>Kalikan sekawan: $\\lim_{x \\to 3} \\frac{(x-3)(x+3)(\\sqrt{x+1}+2)}{(x+1) - 4} = \\lim_{x \\to 3} (x+3)(\\sqrt{x+1}+2)$.<br>Substitusi $x=3 \\implies (3+3)(\\sqrt{4}+2) = 6 \\times 4 = 24$ (Opsi A)."
+        },
+        {
+            id: 22, type: "multiple", topic: "LIMIT", indicator: "Limit di ketakhinggaan konteks populasi",
+            q: "22. Populasi spesies dimodelkan oleh $P(t) = \\frac{12000t^2 + 500t}{3t^2 + 20}$ ($t$ dalam tahun). Manakah pernyataan yang <b>BENAR</b>?",
+            options: [
+                "Pada $t = 0$, populasi awal adalah 0 ekor.",
+                "Dalam jangka waktu sangat lama ($t \\to \\infty$), populasi mendekati 4.000 ekor.",
+                "Derajat tertinggi pembilang dan penyebut fungsi tersebut sama, yaitu 2.",
+                "Populasi akan bertambah terus tanpa batas hingga tak terhingga.",
+                "Pada $t = 1$, populasi spesies lebih dari 500 ekor."
+            ], ans: [0, 1, 2, 4],
+            exp: "<b>Pembahasan Opsi:</b><br>• <b>A (Benar):</b> $P(0) = \\frac{0}{20} = 0$.<br>• <b>B (Benar):</b> $\\lim_{t \\to \\infty} \\frac{12000t^2 + 500t}{3t^2 + 20} = \\frac{12000}{3} = 4000$.<br>• <b>C (Benar):</b> Pangkat tertinggi adalah $t^2$.<br>• <b>D (Salah):</b> Populasi memiliki batas jenuh (asimtot) di 4.000.<br>• <b>E (Benar):</b> $P(1) = \\frac{12500}{23} \\approx 543.48 > 500$."
+        },
+        {
+            id: 23, type: "single", topic: "LIMIT", indicator: "Parameter limit trigonometri",
+            q: "23. Jika $\\lim_{x \\to 0} \\frac{1 - \\cos(ax)}{bx^2} = 8$, sepasang nilai $a$ dan $b$ positif yang memenuhi adalah...",
+            options: [
+                "a = 4, b = 2",
+                "a = 4, b = 1",
+                "a = 2, b = 4",
+                "a = 8, b = 1",
+                "a = 2, b = 1"
+            ], ans: [1],
+            exp: "<b>Solusi:</b><br>Identitas: $1 - \\cos(ax) = 2\\sin^2\\left(\\frac{a}{2}x\\right)$.<br>Limit: $\\frac{2(a/2)^2}{b} = \\frac{a^2}{2b} = 8 \\implies a^2 = 16b$.<br>Uji opsi B: jika $a=4, b=1 \\implies 4^2 = 16(1) \\implies 16 = 16$ (Sesuai) (Opsi B)."
+        },
+        {
+            id: 24, type: "multiple", topic: "LIMIT", indicator: "Limit trigonometri perkalian fungsi",
+            q: "24. Diketahui limit $\\lim_{x \\to 0} \\frac{\\tan(4x) \\cdot \\sin(3x)}{1 - \\cos(2x)}$. Manakah pernyataan yang <b>BENAR</b>?",
+            options: [
+                "Bentuk $1 - \\cos(2x)$ ekuivalen dengan $2\\sin^2(x)$.",
+                "Hasil dari nilai limit tersebut adalah 6.",
+                "Substitusi langsung $x=0$ menghasilkan bentuk tak tentu $\\frac{0}{0}$.",
+                "Nilai limit tersebut adalah 12.",
+                "Limit tersebut tidak memiliki nilai (tak hingga)."
+            ], ans: [0, 1, 2],
+            exp: "<b>Pembahasan Opsi:</b><br>• <b>A (Benar):</b> $1 - \\cos(2x) = 2\\sin^2(x)$.<br>• <b>B (Benar):</b> $\\lim_{x \\to 0} \\frac{\\tan(4x) \\cdot \\sin(3x)}{2\\sin(x)\\sin(x)} = \\frac{4 \\times 3}{2 \\times 1 \\times 1} = 6$.<br>• <b>C (Benar):</b> $\\frac{0}{0}$.<br>• <b>D & E (Salah):</b> Nilainya konvergen ke 6."
+        },
+        {
+            id: 25, type: "single", topic: "LIMIT", indicator: "Rasio limit trigonometri luas segitiga",
+            q: "25. Rasio luas segitiga sama kaki $\\frac{1}{2}r^2\\sin\\theta$ terhadap luas setengah lingkaran $\\frac{1}{2}\\pi r^2$ saat $\\theta \\to 0$ mendekati...",
+            options: ["1/$\\pi$", "0", "1", "$\\pi$", "Tak hingga"], ans: [1],
+            exp: "<b>Solusi:</b><br>$\\lim_{\\theta \\to 0} \\frac{\\frac{1}{2}r^2\\sin\\theta}{\\frac{1}{2}\\pi r^2} = \\lim_{\\theta \\to 0} \\frac{\\sin\\theta}{\\pi} = \\frac{0}{\\pi} = 0$ (Opsi B)."
+        }
+    ];
+
+    let currentIdx = 0;
+    // simpan array jawaban user per soal: null atau [0] atau [0, 2]
+    let userAnswers = new Array(quizData.length).fill(null);
+    let studentData = {};
+
+    function safeMathJax() {
+        if (window.MathJax && typeof MathJax.typesetPromise === 'function') {
+            MathJax.typesetPromise().catch(err => console.log("MathJax error:", err));
+        }
+    }
+
+    function showPage(pageId) {
+        document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        window.scrollTo(0, 0);
+    }
+
+    function startQuiz() {
+        studentData.name = document.getElementById('student-name').value;
+        studentData.class = document.getElementById('student-class').value;
+        studentData.date = document.getElementById('test-date').value;
+
+        showPage('page-quiz');
+        renderPalette();
+        loadQuestion(0);
+    }
+
+    function renderPalette() {
+        const palContainer = document.getElementById('palette-container');
+        palContainer.innerHTML = '';
+        quizData.forEach((_, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'palette-btn';
+            btn.id = `pal-${i}`;
+            btn.innerText = i + 1;
+            btn.onclick = () => loadQuestion(i);
+            palContainer.appendChild(btn);
+        });
+    }
+
+    function loadQuestion(index) {
+        currentIdx = index;
+        const q = quizData[index];
+
+        document.getElementById('question-number-display').innerText = `Soal ${index + 1} dari ${quizData.length}`;
+        document.getElementById('topic-badge').innerText = q.topic;
+
+        const typeBadge = document.getElementById('type-badge');
+        if (q.type === 'multiple') {
+            typeBadge.innerText = 'Pilihan Ganda Kompleks (Banyak Jawaban)';
+            typeBadge.className = 'badge-type pgk';
+        } else {
+            typeBadge.innerText = 'Pilihan Ganda (1 Jawaban)';
+            typeBadge.className = 'badge-type';
+        }
+
+        document.getElementById('question-text').innerHTML = q.q;
+
+        const optContainer = document.getElementById('options-container');
+        optContainer.innerHTML = '';
+
+        const currentSelection = userAnswers[index] || [];
+
+        q.options.forEach((optText, optIdx) => {
+            const li = document.createElement('li');
+            li.className = 'option-item';
+            
+            const isChecked = currentSelection.includes(optIdx);
+            const inputType = q.type === 'multiple' ? 'checkbox' : 'radio';
+            
+            li.innerHTML = `
+                <label class="option-label ${isChecked ? 'selected' : ''}" id="lbl-${optIdx}">
+                    <input type="${inputType}" name="option" value="${optIdx}" ${isChecked ? 'checked' : ''}>
+                    <span class="option-key-prefix">${OPTION_KEYS[optIdx]}.</span>
+                    <div>${optText}</div>
+                </label>
+            `;
+
+            const inputEl = li.querySelector('input');
+            inputEl.addEventListener('change', () => {
+                handleOptionChange(q.type, optIdx, inputEl.checked);
+            });
+
+            optContainer.appendChild(li);
+        });
+
+        renderFeedback(userAnswers[index]);
+
+        // Progress & Navigation
+        document.getElementById('quiz-progress').style.width = `${((index + 1) / quizData.length) * 100}%`;
+        document.getElementById('btn-prev').disabled = (index === 0);
+        
+        if (index === quizData.length - 1) {
+            document.getElementById('btn-next').style.display = 'none';
+            document.getElementById('btn-submit').style.display = 'inline-block';
+        } else {
+            document.getElementById('btn-next').style.display = 'inline-block';
+            document.getElementById('btn-submit').style.display = 'none';
+        }
+
+        updatePaletteHighlight();
+        safeMathJax();
+    }
+
+    function handleOptionChange(qType, optIdx, isChecked) {
+        if (qType === 'single') {
+            userAnswers[currentIdx] = [optIdx];
+        } else {
+            let current = userAnswers[currentIdx] ? [...userAnswers[currentIdx]] : [];
+            if (isChecked) {
+                if (!current.includes(optIdx)) current.push(optIdx);
+            } else {
+                current = current.filter(item => item !== optIdx);
+            }
+            userAnswers[currentIdx] = current.length > 0 ? current.sort((a, b) => a - b) : null;
+        }
+
+        updateSelectedUI();
+        renderFeedback(userAnswers[currentIdx]);
+    }
+
+    function isAnswerCorrect(userAns, qAns) {
+        if (!userAns) return false;
+        if (userAns.length !== qAns.length) return false;
+        const sortedUser = [...userAns].sort((a, b) => a - b);
+        const sortedQ = [...qAns].sort((a, b) => a - b);
+        return sortedUser.every((val, idx) => val === sortedQ[idx]);
+    }
+
+    function renderFeedback(selectedArray) {
+        const fbBox = document.getElementById('feedback-box');
+        if (!selectedArray || selectedArray.length === 0) {
+            fbBox.style.display = 'none';
+            fbBox.innerHTML = '';
+            return;
+        }
+
+        const q = quizData[currentIdx];
+        fbBox.style.display = 'block';
+
+        const correct = isAnswerCorrect(selectedArray, q.ans);
+
+        if (correct) {
+            fbBox.className = 'feedback-box fb-correct';
+            fbBox.innerHTML = `
+                <div class="fb-title">🎉 Luar biasa! Jawaban Anda BENAR!</div>
+                <div>Kerja bagus! Pemahaman Anda terhadap indikator ini sudah sangat baik.</div>
+                <div class="fb-content">${q.exp}</div>
+            `;
+        } else {
+            fbBox.className = 'feedback-box fb-incorrect';
+            fbBox.innerHTML = `
+                <div class="fb-title">❌ Jawaban Belum Tepat / Belum Lengkap. Tetap Semangat!</div>
+                <div>Perhatikan pilihan dan pelajari pembahasannya di bawah ini:</div>
+                <div class="fb-content">${q.exp}</div>
+            `;
+        }
+
+        safeMathJax();
+    }
+
+    function updateSelectedUI() {
+        const currentSelection = userAnswers[currentIdx] || [];
+        const labels = document.querySelectorAll('.option-label');
+        labels.forEach((lbl, idx) => {
+            if (currentSelection.includes(idx)) {
+                lbl.classList.add('selected');
+            } else {
+                lbl.classList.remove('selected');
+            }
+        });
+        updatePaletteHighlight();
+    }
+
+    function updatePaletteHighlight() {
+        quizData.forEach((_, i) => {
+            const btn = document.getElementById(`pal-${i}`);
+            if (btn) {
+                btn.className = 'palette-btn';
+                if (userAnswers[i] !== null && userAnswers[i].length > 0) btn.classList.add('answered');
+                if (i === currentIdx) btn.classList.add('active');
+            }
+        });
+    }
+
+    function nextQuestion() {
+        if (currentIdx < quizData.length - 1) loadQuestion(currentIdx + 1);
+    }
+
+    function prevQuestion() {
+        if (currentIdx > 0) loadQuestion(currentIdx - 1);
+    }
+
+    function confirmSubmit() {
+        const answeredCount = userAnswers.filter(a => a !== null && a.length > 0).length;
+        if (answeredCount < quizData.length) {
+            if (!confirm(`Anda baru menjawab ${answeredCount} dari ${quizData.length} soal. Yakin ingin menyelesaikan kuis?`)) {
+                return;
+            }
+        }
+        showResults();
+    }
+
+    function showResults() {
+        let correctCount = 0;
+        quizData.forEach((q, i) => {
+            if (isAnswerCorrect(userAnswers[i], q.ans)) correctCount++;
+        });
+
+        const score = Math.round((correctCount / quizData.length) * 100);
+        const incorrectCount = quizData.length - correctCount;
+
+        document.getElementById('result-student-name').innerText = studentData.name;
+        document.getElementById('result-student-class').innerText = `${studentData.class} | ${studentData.date}`;
+        document.getElementById('final-score').innerText = score;
+        document.getElementById('stat-correct').innerText = correctCount;
+        document.getElementById('stat-incorrect').innerText = incorrectCount;
+        document.getElementById('stat-accuracy').innerText = `${score}%`;
+
+        // Render Analisis & Pembahasan Lengkap di Bagian Belakang
+        const analysisList = document.getElementById('analysis-list');
+        analysisList.innerHTML = '';
+
+        quizData.forEach((q, i) => {
+            const isCorrect = isAnswerCorrect(userAnswers[i], q.ans);
+            const userAnsArr = userAnswers[i];
+            
+            let userChoiceText = "<i>Tidak dijawab</i>";
+            if (userAnsArr && userAnsArr.length > 0) {
+                userChoiceText = userAnsArr.map(idx => `<b>${OPTION_KEYS[idx]}</b>`).join(', ');
+            }
+
+            const correctChoiceText = q.ans.map(idx => `<b>${OPTION_KEYS[idx]}</b>`).join(', ');
+
+            const card = document.createElement('div');
+            card.className = `analysis-card ${isCorrect ? 'correct' : 'incorrect'}`;
+            
+            const qTypeLabel = q.type === 'multiple' ? 'PG Kompleks' : 'PG Biasa';
+
+            card.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <span class="status-badge ${isCorrect ? 'correct' : 'incorrect'}">${isCorrect ? 'BENAR' : 'SALAH'}</span>
+                        <span style="font-size:0.8rem; font-weight:bold; color:#555; margin-left:6px;">[${qTypeLabel}]</span>
+                    </div>
+                    <span style="font-size:0.8rem; color:#666;">[${q.topic}] ${q.indicator}</span>
+                </div>
+                <div style="font-weight:600; margin: 10px 0;">${q.q}</div>
+                <div style="font-size:0.9rem; margin-bottom:4px;"><b>Jawaban Anda:</b> ${userChoiceText}</div>
+                <div style="font-size:0.9rem; color: var(--iss-green-dark);"><b>Kunci Jawaban:</b> ${correctChoiceText}</div>
+                <div class="explanation-box">${q.exp}</div>
+            `;
+            analysisList.appendChild(card);
+        });
+
+        showPage('page-result');
+        safeMathJax();
+    }
+</script>
+
+</body>
+</html>
